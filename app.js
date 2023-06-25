@@ -1,14 +1,20 @@
 const connectDb = require('./database');
 const express = require('express');
-const app = express();
+
 const urlRoutes = require('./api/urls/urls.routes');
 const userRoutes = require('./api/users/users.routes');
+const morgan = require('morgan')
+const passport = require("passport")
+const { localStrategy } = require("./middleware/passport")
 
 connectDb();
+const app = express();
+app.use(morgan("dev"))
 app.use(express.json());
-
+app.use(passport.initialize())
+passport.use(localStrategy)
 app.use('/urls', urlRoutes);
-app.use(userRoutes);
+app.use("/auth", userRoutes);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
