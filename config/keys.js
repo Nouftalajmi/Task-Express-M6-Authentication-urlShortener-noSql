@@ -8,3 +8,4 @@ if (!config.JWT_EXPIRATION_MS || !config.JWT_SECRET) {
     console.log('ENV values missing!')
     process.exit(1)
 }
+module.exports = config

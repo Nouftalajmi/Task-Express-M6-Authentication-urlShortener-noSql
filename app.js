@@ -5,14 +5,18 @@ const urlRoutes = require('./api/urls/urls.routes');
 const userRoutes = require('./api/users/users.routes');
 const morgan = require('morgan')
 const passport = require("passport")
-const { localStrategy } = require("./middleware/passport")
+const { localStrategy, jwtStrategy } = require("./middleware/passport")
 
 connectDb();
 const app = express();
 app.use(morgan("dev"))
 app.use(express.json());
+
 app.use(passport.initialize())
 passport.use(localStrategy)
+passport.use(jwtStrategy);
+
+
 app.use('/urls', urlRoutes);
 app.use("/auth", userRoutes);
 

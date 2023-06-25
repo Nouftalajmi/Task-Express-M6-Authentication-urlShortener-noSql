@@ -36,10 +36,15 @@ exports.redirect = async (req, res) => {
 
 exports.deleteUrl = async (req, res) => {
   try {
+
     const url = await Url.findOne({ urlCode: req.params.code });
     if (url) {
-      await Url.findByIdAndDelete(url._id);
-      return res.status(201).json('Deleted');
+      if (req.user._id.equals(req.userId)) {
+        await Url.findByIdAndDelete(url._id);
+        return res.status(201).json('Deleted');
+
+      } else { return res.status(404).json('user is unauthorized'); }
+
     } else {
       return res.status(404).json('No URL Found');
     }
